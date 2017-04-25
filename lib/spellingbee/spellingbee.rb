@@ -33,7 +33,7 @@ class SpellingBee
 
   def load_dictionary
     @dict_frequency = Hash.new(1)
-    words = File.new(@options[:source_text]).read.downcase.scan(/[a-z]+/)
+    words = File.read(@options[:source_text], :encoding => 'iso-8859-1').downcase.scan(/[a-z]+/)
     words.each { |word| @dict_frequency[word] += 1 }
   end
 end
