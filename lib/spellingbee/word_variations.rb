@@ -1,6 +1,10 @@
 class SpellingBee
   class WordVariations
     def initialize(word)
+      @words = [word]
+      if word.kind_of?(Array)
+        @words = word
+      end
       @word = word || ''
     end
 
@@ -15,13 +19,23 @@ class SpellingBee
     # Returns all the combinations of the word with one character removed.
     # Example: deletions("word") #=> ["ord", "wrd", "wod", "wor"]
     def deletions
-      (0..length).map { |i| "#{@word[0...i]}#{@word[i+1..-1]}" }
+      new_words = []
+      @words.each do |word|
+        @word = word || ''
+        new_words += (0..length).map { |i| "#{@word[0...i]}#{@word[i+1..-1]}" }
+      end
+      new_words
     end
 
     # Returns all combinations of the word with adjacent words transposed.
     # Example: transpositions("word") #=> ["owrd", "wrod", "wodr"]
     def transpositions
-      (0..length-1).map { |i| "#{@word[0...i]}#{@word[i+1, 1]}#{@word[i,1]}#{@word[i+2..-1]}" }
+      new_words = []
+      @words.each do |word|
+        @word = word || ''     
+        new_words += (0..length-1).map { |i| "#{@word[0...i]}#{@word[i+1, 1]}#{@word[i,1]}#{@word[i+2..-1]}" }
+      end
+      new_words
     end
 
     # Returns all variations of the word with each character replaced by all
@@ -29,8 +43,11 @@ class SpellingBee
     # Example: replacements("word") #=> ["aord", "bord", "cord", ... "ward", "wbrd" ...]
     def replacements
       new_words = []
-      length.times do |i|
-        ('a'..'z').each { |c| new_words << "#{@word[0...i]}#{c}#{@word[i+1..-1]}" }
+      @words.each do |word|
+        @word = word || ''  
+        length.times do |i|
+          ('a'..'z').each { |c| new_words << "#{@word[0...i]}#{c}#{@word[i+1..-1]}" }
+        end
       end
       new_words
     end
@@ -39,8 +56,11 @@ class SpellingBee
     # Example: insertions("word") #=> ["aword", "bword", "cword" ... "waord", "wbord" ... ]
     def insertions
       new_words = []
-      (length + 1).times do |i|
-        ('a'..'z').each { |c| new_words << "#{@word[0...i]}#{c}#{@word[i..-1]}" }
+      @words.each do |word|
+        @word = word || ''      
+        (length + 1).times do |i|
+          ('a'..'z').each { |c| new_words << "#{@word[0...i]}#{c}#{@word[i..-1]}" }
+        end
       end
       new_words
     end
