@@ -18,7 +18,8 @@ class SpellingBee
   #   s.correct "qqqqqq"     #=> ["qqqqqq"]   -> no suggestions
   #
   def correct(word)
-    known([word]) || known(WordVariations.new(word).all) || [word]
+    edit1_words = WordVariations.new(word).all
+    known([word]) || known(WordVariations.new(word).all) || known(WordVariations.new(edit1_words).all) || [word]
   end
 
   private
